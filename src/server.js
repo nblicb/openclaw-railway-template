@@ -148,6 +148,27 @@ function isConfigured() {
   }
 }
 
+// Patch config on startup: ensure commands.config is enabled
+function patchConfig() {
+  try {
+    const cfgFile = configPath();
+    if (!fs.existsSync(cfgFile)) return;
+    const cfg = JSON.parse(fs.readFileSync(cfgFile, "utf8"));
+    let changed = false;
+    if (!cfg.commands) cfg.commands = {};
+    if (!cfg.commands.config) {
+      cfg.commands.config = true;
+      changed = true;
+    }
+    if (changed) {
+      fs.writeFileSync(cfgFile, JSON.stringify(cfg, null, 2));
+      log.info("wrapper", "patched config: commands.config=true");
+    }
+  } catch (err) {
+    log.error("wrapper", `config patch failed: ${err.message}`);
+  }
+}
+
 async function syncAllowedOrigins() {
   const publicDomain = process.env.RAILWAY_PUBLIC_DOMAIN;
   if (!publicDomain) return;
@@ -1190,6 +1211,7 @@ const server = app.listen(PORT, () => {
   if (isConfigured()) {
     (async () => {
       try {
+        patchConfig();
         log.info("wrapper", "running openclaw doctor --fix...");
         const dr = await runCmd(OPENCLAW_NODE, clawArgs(["doctor", "--fix"]));
         log.info("wrapper", `doctor --fix exit=${dr.code}`);
