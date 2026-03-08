@@ -1136,6 +1136,14 @@ const PROXY_ORIGIN = process.env.RAILWAY_PUBLIC_DOMAIN
 proxy.on("proxyReq", (proxyReq, req, res) => {
   proxyReq.setHeader("Authorization", `Bearer ${OPENCLAW_GATEWAY_TOKEN}`);
   proxyReq.setHeader("Origin", PROXY_ORIGIN);
+
+  // Re-stream body consumed by express.json() so http-proxy can forward it
+  if (req.body && Object.keys(req.body).length > 0) {
+    const bodyData = JSON.stringify(req.body);
+    proxyReq.setHeader("Content-Type", "application/json");
+    proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyData));
+    proxyReq.write(bodyData);
+  }
 });
 
 proxy.on("proxyReqWs", (proxyReq, req, socket, options, head) => {
