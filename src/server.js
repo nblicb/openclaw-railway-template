@@ -1219,6 +1219,18 @@ const server = app.listen(PORT, () => {
       } catch (err) {
         log.warn("wrapper", `doctor --fix failed: ${err.message}`);
       }
+      // Auto-install skills from OPENCLAW_INSTALL_SKILLS env var (comma-separated)
+      const skillsToInstall = (process.env.OPENCLAW_INSTALL_SKILLS || "").split(",").map(s => s.trim()).filter(Boolean);
+      for (const skill of skillsToInstall) {
+        try {
+          log.info("wrapper", `installing skill: ${skill}...`);
+          const sr = await runCmd(OPENCLAW_NODE, clawArgs(["skills", "install", skill]));
+          log.info("wrapper", `skill ${skill} install exit=${sr.code}`);
+          if (sr.output) log.info("wrapper", sr.output);
+        } catch (err) {
+          log.warn("wrapper", `skill ${skill} install failed: ${err.message}`);
+        }
+      }
       await ensureGatewayRunning();
     })().catch((err) => {
       log.error("wrapper", `failed to start gateway at boot: ${err.message}`);
