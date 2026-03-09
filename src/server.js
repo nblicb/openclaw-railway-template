@@ -1232,16 +1232,16 @@ const server = app.listen(PORT, () => {
       } catch (err) {
         log.warn("wrapper", `doctor --fix failed: ${err.message}`);
       }
-      // Auto-install skills from OPENCLAW_INSTALL_SKILLS env var (comma-separated)
-      const skillsToInstall = (process.env.OPENCLAW_INSTALL_SKILLS || "").split(",").map(s => s.trim()).filter(Boolean);
-      for (const skill of skillsToInstall) {
+      // Auto-install plugins from OPENCLAW_INSTALL_PLUGINS env var (comma-separated npm specs)
+      const pluginsToInstall = (process.env.OPENCLAW_INSTALL_PLUGINS || "").split(",").map(s => s.trim()).filter(Boolean);
+      for (const plugin of pluginsToInstall) {
         try {
-          log.info("wrapper", `installing skill: ${skill}...`);
-          const sr = await runCmd(OPENCLAW_NODE, clawArgs(["skills", "install", skill]));
-          log.info("wrapper", `skill ${skill} install exit=${sr.code}`);
+          log.info("wrapper", `installing plugin: ${plugin}...`);
+          const sr = await runCmd(OPENCLAW_NODE, clawArgs(["plugins", "install", plugin]));
+          log.info("wrapper", `plugin ${plugin} install exit=${sr.code}`);
           if (sr.output) log.info("wrapper", sr.output);
         } catch (err) {
-          log.warn("wrapper", `skill ${skill} install failed: ${err.message}`);
+          log.warn("wrapper", `plugin ${plugin} install failed: ${err.message}`);
         }
       }
       await ensureGatewayRunning();
