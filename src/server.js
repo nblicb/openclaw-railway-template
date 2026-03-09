@@ -860,6 +860,19 @@ app.post("/setup/api/doctor", requireSetupAuth, async (_req, res) => {
   });
 });
 
+app.post("/setup/api/cli", requireSetupAuth, async (req, res) => {
+  const args = req.body.args || [];
+  if (!Array.isArray(args)) {
+    return res.status(400).json({ ok: false, error: "args must be an array" });
+  }
+  const result = await runCmd(OPENCLAW_NODE, clawArgs(args));
+  return res.status(result.code === 0 ? 200 : 500).json({
+    ok: result.code === 0,
+    code: result.code,
+    output: result.output,
+  });
+});
+
 app.get("/setup/api/devices", requireSetupAuth, async (_req, res) => {
   const args = ["devices", "list", "--json", "--token", OPENCLAW_GATEWAY_TOKEN];
   const result = await runCmd(OPENCLAW_NODE, clawArgs(args));
