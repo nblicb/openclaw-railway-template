@@ -236,6 +236,15 @@ async function startGateway() {
   fs.mkdirSync(STATE_DIR, { recursive: true });
   fs.mkdirSync(WORKSPACE_DIR, { recursive: true });
 
+  // Sync bundled skills from /app/skills to workspace so OpenClaw gateway picks them up
+  const appSkillsDir = path.join(path.dirname(new URL(import.meta.url).pathname), "..", "skills");
+  const wsSkillsDir = path.join(WORKSPACE_DIR, "skills");
+  if (fs.existsSync(appSkillsDir)) {
+    fs.mkdirSync(wsSkillsDir, { recursive: true });
+    fs.cpSync(appSkillsDir, wsSkillsDir, { recursive: true, force: false });
+    log.info("gateway", `synced skills from ${appSkillsDir} to ${wsSkillsDir}`);
+  }
+
   const stopResult = await runCmd(OPENCLAW_NODE, clawArgs(["gateway", "stop"]));
   log.info("gateway", `stop existing gateway exit=${stopResult.code}`);
 
