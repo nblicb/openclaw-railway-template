@@ -11,10 +11,14 @@ fi
 rm -rf /home/linuxbrew/.linuxbrew
 ln -sfn /data/.linuxbrew /home/linuxbrew/.linuxbrew
 
-# Sync workspace skills from repo (overwrite to pick up updates)
+# Sync workspace skills from repo (delete + copy to ensure updates)
 mkdir -p /data/workspace/skills
 if [ -d /app/skills ]; then
-  cp -r /app/skills/* /data/workspace/skills/ 2>/dev/null || true
+  for skill_dir in /app/skills/*/; do
+    skill_name=$(basename "$skill_dir")
+    rm -rf "/data/workspace/skills/$skill_name"
+    cp -r "$skill_dir" "/data/workspace/skills/$skill_name"
+  done
 fi
 
 exec gosu openclaw node src/server.js
