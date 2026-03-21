@@ -2,10 +2,6 @@
 name: investlog-ai
 version: 1.0.0
 description: "Real-time US stock research: quotes, earnings, valuation, analyst ratings, insider trades, congress trades, fund holdings, technical analysis, dividends, and financial health. Use when checking stock prices, analyzing earnings, researching who owns a stock, or evaluating if a stock is overvalued."
-metadata:
-  openclaw:
-    requires:
-      env: [INVESTLOG_API_KEY]
 ---
 
 **AI-powered US stock research API covering 5,700+ stocks. Ask in natural language, get structured financial data.**
