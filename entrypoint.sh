@@ -11,10 +11,10 @@ fi
 rm -rf /home/linuxbrew/.linuxbrew
 ln -sfn /data/.linuxbrew /home/linuxbrew/.linuxbrew
 
-# Copy workspace skills from repo to runtime workspace
+# Sync workspace skills from repo (overwrite to pick up updates)
 mkdir -p /data/workspace/skills
 if [ -d /app/skills ]; then
-  cp -rn /app/skills/* /data/workspace/skills/ 2>/dev/null || true
+  cp -r /app/skills/* /data/workspace/skills/ 2>/dev/null || true
 fi
 
 exec gosu openclaw node src/server.js
