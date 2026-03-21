@@ -1,0 +1,136 @@
+---
+name: investlog-ai
+version: 1.0.0
+description: "Real-time US stock research: quotes, earnings, valuation, analyst ratings, insider trades, congress trades, fund holdings, technical analysis, dividends, and financial health. Use when checking stock prices, analyzing earnings, researching who owns a stock, or evaluating if a stock is overvalued."
+metadata:
+  openclaw:
+    requires:
+      env: [INVESTLOG_API_KEY]
+---
+
+**AI-powered US stock research API covering 5,700+ stocks. Ask in natural language, get structured financial data.**
+
+## How to use
+
+Send a POST request to the InvestLog API with a natural language query. The system automatically detects the stock ticker and selects the right data to return.
+
+### Basic query
+
+```bash
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Is NVDA overvalued?"}'
+```
+
+### Query with specific skill and symbol
+
+For more precise results, specify the skill name and ticker:
+
+```bash
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "AAPL earnings", "skill": "financials", "symbol": "AAPL"}'
+```
+
+### With API key (after free trial)
+
+```bash
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: $INVESTLOG_API_KEY" \
+  -d '{"query": "Tesla analyst ratings"}'
+```
+
+### Compound analysis (multiple calls)
+
+For comprehensive stock analysis, make multiple calls to combine different data:
+
+```bash
+# 1. Get current price and valuation
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "NVDA valuation", "skill": "valuation", "symbol": "NVDA"}'
+
+# 2. Get analyst ratings and price targets
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "NVDA analyst ratings", "skill": "analyst-view", "symbol": "NVDA"}'
+
+# 3. Get recent earnings performance
+curl -X POST https://api.investlog.ai/api/v1/query \
+  -H "Content-Type: application/json" \
+  -d '{"query": "NVDA earnings history", "skill": "financials", "symbol": "NVDA"}'
+```
+
+Combine the results from multiple calls to provide a thorough analysis.
+
+## Response format
+
+```json
+{
+  "skill": "valuation",
+  "symbol": "NVDA",
+  "results": [
+    {"tool": "get_stock_quote", "symbol": "NVDA", "data": {"price": 172.7, "change_percent": -3.28}},
+    {"tool": "get_financial_ratios", "symbol": "NVDA", "data": {"pe": 34.96, "peg": 0.54}}
+  ],
+  "usage": {"queries_remaining": 9}
+}
+```
+
+## Parameters
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `query` | Yes | Natural language question about US stocks |
+| `skill` | No | Skill name for direct routing (see list below). If omitted, auto-detected from query |
+| `symbol` | No | US stock ticker (e.g. NVDA, AAPL). If omitted, extracted from query automatically |
+
+## Available skills
+
+| Skill | What it returns |
+|-------|----------------|
+| `stock-quote` | Real-time price, daily change, multi-period returns (1D/1M/1Y/5Y) |
+| `valuation` | PE, PB, PS, PEG, ROE, margins, FCF yield, DCF intrinsic value |
+| `financials` | Income statement, balance sheet, cash flow, growth rates, earnings history |
+| `analyst-view` | Analyst ratings, rating trends, price targets, EPS/revenue estimates |
+| `company-profile` | Business description, sector, executives, compensation, revenue segmentation |
+| `insider-activity` | Insider buy/sell transactions, quarterly insider trading statistics |
+| `congress-trades` | US Senate and House stock trading records |
+| `fund-exposure` | Institutional 13F holdings, ETF exposure, ETF holdings |
+| `financial-health` | Altman Z-Score, Piotroski F-Score, composite financial rating |
+| `dividends-splits` | Dividend history, stock splits, shares float |
+| `news` | Latest stock-specific news articles |
+| `market-overview` | Top gainers/losers/most active, IPO calendar, index constituents (no symbol required) |
+| `technicals` | RSI, MACD, SMA, EMA, Bollinger, KDJ, ATR, OBV, CCI, crossover signals |
+
+## Security
+
+- Network: POST requests to https://api.investlog.ai only
+- No files read or written on your machine
+- No system commands executed
+- API key is optional (first 10 queries free, no key needed)
+
+## Setup
+
+- **Free trial**: No setup needed. First 10 queries are free — just start asking.
+- **API key**: After free trial, register at https://api.investlog.ai to get your API key, then set it:
+  ```bash
+  export INVESTLOG_API_KEY="il_your_api_key_here"
+  ```
+- **Plans**: Basic ($9.9/mo, 100 queries/day) | Pro ($19.9/mo, 300 queries/day)
+
+## Output guidelines
+
+- Present data in a clear, readable format
+- For list data (holdings, transactions), use tables when possible
+- Highlight key metrics and trends
+- Include the stock ticker with every data point
+- Do not mention the data source — just present the information
+
+## Chinese language support
+
+Supports Chinese natural language queries:
+- "巴菲特前十大持仓股票是哪几个？"
+- "英伟达的分析师评级是怎么样的？"
+- "哪个参议员买了PLTR？"
