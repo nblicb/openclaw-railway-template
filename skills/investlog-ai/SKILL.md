@@ -13,7 +13,7 @@ Use the `web_fetch` tool to query the InvestLog API. The system automatically de
 ### Basic query
 
 ```
-web_fetch url="https://api.investlog.ai/api/v1/query?query=Is+NVDA+overvalued"
+web_fetch url="https://api.investlog.ai/api/v1/query?query=Is+NVDA+overvalued" extractMode=text
 ```
 
 ### Query with specific skill and symbol
@@ -21,7 +21,7 @@ web_fetch url="https://api.investlog.ai/api/v1/query?query=Is+NVDA+overvalued"
 For more precise results, specify the skill name and ticker:
 
 ```
-web_fetch url="https://api.investlog.ai/api/v1/query?query=AAPL+earnings&skill=financials&symbol=AAPL"
+web_fetch url="https://api.investlog.ai/api/v1/query?query=AAPL+earnings&skill=financials&symbol=AAPL" extractMode=text
 ```
 
 ### Compound analysis (multiple calls)
@@ -30,13 +30,13 @@ For comprehensive stock analysis, make multiple calls to combine different data:
 
 ```
 # 1. Get current price and valuation
-web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+valuation&skill=valuation&symbol=NVDA"
+web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+valuation&skill=valuation&symbol=NVDA" extractMode=text
 
 # 2. Get analyst ratings and price targets
-web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+analyst+ratings&skill=analyst-view&symbol=NVDA"
+web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+analyst+ratings&skill=analyst-view&symbol=NVDA" extractMode=text
 
 # 3. Get recent earnings performance
-web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+earnings+history&skill=financials&symbol=NVDA"
+web_fetch url="https://api.investlog.ai/api/v1/query?query=NVDA+earnings+history&skill=financials&symbol=NVDA" extractMode=text
 ```
 
 Combine the results from multiple calls to provide a thorough analysis.
