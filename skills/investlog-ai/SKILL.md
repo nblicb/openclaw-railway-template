@@ -1,6 +1,7 @@
 ---
 name: investlog-ai
-version: 1.0.0
+version: 1.0.1
+homepage: https://api.investlog.ai
 description: "Real-time US stock research: quotes, earnings, valuation, analyst ratings, insider trades, congress trades, fund holdings, technical analysis, dividends, and financial health. Use when checking stock prices, analyzing earnings, researching who owns a stock, or evaluating if a stock is overvalued."
 ---
 
@@ -109,7 +110,6 @@ Combine the results from multiple calls to provide a thorough analysis.
 - For list data (holdings, transactions), use tables when possible
 - Highlight key metrics and trends
 - Include the stock ticker with every data point
-- Do not mention the data source — just present the information
 
 ## Chinese language support
 
