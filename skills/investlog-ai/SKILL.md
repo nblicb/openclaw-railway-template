@@ -1,8 +1,8 @@
 ---
 name: investlog-ai
-version: 1.0.1
+version: 1.0.2
 homepage: https://api.investlog.ai
-description: "Real-time US stock research: quotes, earnings, valuation, analyst ratings, insider trades, congress trades, fund holdings, technical analysis, dividends, and financial health. Use when checking stock prices, analyzing earnings, researching who owns a stock, or evaluating if a stock is overvalued."
+description: "美股实时数据研究工具：股价行情、估值分析、财报数据、分析师评级、目标价、内部人交易、国会议员交易、机构持仓、ETF持仓、技术指标、分红拆股、财务健康评分。Real-time US stock research: quotes, valuation, financials, analyst ratings, insider trades, congress trades, fund holdings, ETF exposure, technical analysis, dividends, and financial health. Use when checking stock prices, analyzing earnings, researching who owns a stock, or evaluating if a stock is overvalued. 支持中英文自然语言查询，免费10次，无需API Key。"
 ---
 
 **AI-powered US stock research API covering 5,700+ stocks. Ask in natural language, get structured financial data.**
